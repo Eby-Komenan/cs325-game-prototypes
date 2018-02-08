@@ -30,40 +30,41 @@ window.onload = function () {
     var bouncy;
     var commandText;
     var winOrFailText;
+    var gameLost=false;
     //Time before the game issues a command.
-    var timer= game.rnd.realInRange(3,6);
+    var timer= game.rnd.realInRange(3.0,6.0);
     //Time after the command is issued that the player must execute an action.
-    var timeLimit=1.0;
+    var timeLimit=1.5;
     var commandIssued=false;
     var buttonPressed=false;
     
     function create() {
         // Create a sprite at the center of the screen using the 'logo' image.
-        bouncy = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
+        //bouncy = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
         // Anchor the sprite at its center, as opposed to its top-left corner.
         // so it will be truly centered.
-        bouncy.anchor.setTo(0.5, 0.5);
+        //bouncy.anchor.setTo(0.5, 0.5);
         
         // Turn on the arcade physics engine for this sprite.
-        game.physics.enable(bouncy, Phaser.Physics.ARCADE);
+        //game.physics.enable(bouncy, Phaser.Physics.ARCADE);
         // Make it bounce off of the world bounds.
-        bouncy.body.collideWorldBounds = true;
+        //bouncy.body.collideWorldBounds = true;
         
         //Add a background to the game.
         background = game.add.tileSprite(0, 0, 800, 600, 'background');
         //Add the buttons and give them appropriate names.
-        leftButton = game.add.button(game.world.centerX - 200, 400, 'leftButton', leftActionOnClick, this, 2, 1, 0);
-        middleButton= game.add.button(game.world.centerX - 95, 400, 'middleButton', middleActionOnClick, this, 2, 1, 0);
-        rightButton= game.add.button(game.world.centerX +100, 400, 'rightButton', rightActionOnClick, this, 2, 1, 0);
+        leftButton = game.add.button(game.world.centerX - 295, 400, 'button', leftActionOnClick, this, 2, 1, 0);
+        middleButton= game.add.button(game.world.centerX - 95, 400, 'button', middleActionOnClick, this, 2, 1, 0);
+        rightButton= game.add.button(game.world.centerX +100, 400, 'button', rightActionOnClick, this, 2, 1, 0);
         // Add some text using a CSS style.
         // Center it in X, and position its top 15 pixels from the top of the world.
         var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
         var text = game.add.text(game.world.centerX, 15, "Simon says:", style);
         text.anchor.setTo(0.5, 0.0);
-        commandText=game.add.text(game.world.centerX, 10, "", style);
-        winOrFailText=game.add.text(game.world.centerX, 0, "",style);
+        commandText=game.add.text(game.world.centerX-50, 50, "", style);
+        winOrFailText=game.add.text(game.world.centerX-100, 250, "",style);
     }
-    
+    //Changes the text and plays a victory sound.
     function gameWin(){
         winOrFailText.setText("You win! Press F5 to reload.");
         var sounds = game.add.audio('successTone');
@@ -71,6 +72,7 @@ window.onload = function () {
     }
     
     function gameLose(){
+        gameLost=true;
         winOrFailText.setText("You lost... Press F5 to reload.");
         var sounds = game.add.audio('failureTone');
         sounds.play();
@@ -88,7 +90,7 @@ window.onload = function () {
     function leftActionOnClick(){
         buttonPressed=true;
         if(commandIssued){
-            if(((commandText.text==="Left")||commandText.text==="Not middle")||commandText.text==="Not right"){
+            if((((commandText.text==="Left")||commandText.text==="Not middle")||commandText.text==="Not right")&&!gameLost){
                 gameWin();
             }
             else{
@@ -100,7 +102,7 @@ window.onload = function () {
     function rightActionOnClick(){
         buttonPressed=true;
         if(commandIssued){
-            if(((commandText.text==="Right")||commandText.text==="Not middle")||commandText.text==="Not left"){
+            if((((commandText.text==="Right")||commandText.text==="Not middle")||commandText.text==="Not left")&&!gameLost){
                 gameWin();
             }
             else{
@@ -112,7 +114,7 @@ window.onload = function () {
     function middleActionOnClick(){
         buttonPressed=true;
         if(commandIssued){
-            if(((commandText.text==="Middle")||commandText.text==="Not right")||commandText.text==="Not Left"){
+            if((((commandText.text==="Middle")||commandText.text==="Not right")||commandText.text==="Not Left")&&!gameLost){
                 gameWin();
             }
             else{
@@ -130,13 +132,14 @@ window.onload = function () {
         //bouncy.rotation = game.physics.arcade.accelerateToPointer(bouncy, game.input.activePointer, 500, 500, 500);
         
         //After a random amount of time, issue a command.
-        if(Math.abs(game.time.totalElapsedSeconds()- timer) < Number.EPSILON){
+        if((game.time.totalElapsedSeconds()> timer)&&!commandIssued){
             commandText.setText(issueCommand());
         }
         //Lose the game if the player doesn't press a button after the time limit.
-        if((Math.abs(game.time.totalElapsedSeconds()- (timer+timeLimit)) < Number.EPSILON)&&!buttonPressed){
-             
-             gameLose();
+        if((game.time.totalElapsedSeconds()> (timer+timeLimit))&&!buttonPressed){
+            if(!gameLost){ 
+                gameLose();
+            }
          }
     }
 };
