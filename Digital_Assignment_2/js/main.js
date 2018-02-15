@@ -18,13 +18,13 @@ window.onload = function() {
     var bmd;
     var nextChar=0;
     //Will count the number of erroneous keystrokes, will serve as a penalty.
-    var errors=0;
+    var errors = 0;
     var spaceKey;
     function preload() {
         // Load an image and call it 'logo'.
         //game.load.image( 'logo', 'assets/phaser.png' );
         game.load.spritesheet('chicken', 'assets/chicken_large.png', 48, 48);
-        game.load.sprite('egg', 'assets/egg.png');
+        game.load.image('egg', 'assets/egg.png');
         game.load.audio('victory','assets/249524__limetoe__badass-victory.wav');
         game.load.audio('error', 'assets/159367__huminaatio__7-error.wav');
         game.load.audio('failure', 'assets/253174__suntemple__retro-you-lose-sfx.wav');
