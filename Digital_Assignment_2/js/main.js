@@ -13,7 +13,7 @@ window.onload = function() {
     var game = new Phaser.Game( 800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update } );
     
     var phrases= ["Taste egg, human scum!", "Humans will feel my wrath.", "Cluck Cluck, motherclucker!", "I shall sacrifice my eggs for the avian cause."];
-    var word = "Phaserd phaser";
+    var word;
     var correct = [];
     var bmd;
     var nextChar=0;
@@ -56,17 +56,15 @@ window.onload = function() {
         {
             correct[i] = false;
         }
-        var style = { font: "25px Verdana", fill: "#ffffff", align: "center" };
-        var text = game.add.text(game.world.centerX, 15, "Type the following:", style);
-        text.anchor.setTo(0.5, 0.0);
+        //var style = { font: "25px Verdana", fill: "#ffffff", align: "center" };
+        //var text = game.add.text(game.world.centerX, 15, "Type the following:", style);
+        //text.anchor.setTo(0.5, 0.0);
         //  This is our BitmapData onto which we'll draw the word being entered
         bmd = game.make.bitmapData(800, 200);
         bmd.context.font = '25px Arial';
         bmd.context.fillStyle = '#ffffff';
         bmd.context.fillText(word, game.world.centerX, 64);
         bmd.addToWorld();
-        
-        
         
         this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         //  Capture all key presses
@@ -133,7 +131,7 @@ window.onload = function() {
             //  Now draw the word, letter by letter, changing colour as required
             if (correct[i])
             {
-                bmd.context.fillStyle = '#00ff00';
+                bmd.context.fillStyle = '#0fff00';
             }
             else
             {
