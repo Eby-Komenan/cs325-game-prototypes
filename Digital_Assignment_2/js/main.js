@@ -20,14 +20,17 @@ window.onload = function() {
     //Will count the number of erroneous keystrokes, will serve as a penalty.
     var errors = 0;
     var spaceKey;
+    var background;
     function preload() {
         // Load an image and call it 'logo'.
         //game.load.image( 'logo', 'assets/phaser.png' );
         game.load.spritesheet('chicken', 'assets/chicken_large.png', 48, 48);
         game.load.image('egg', 'assets/egg.png');
+        game.load.image('background', 'assets/starfield.jpg');
         game.load.audio('victory','assets/249524__limetoe__badass-victory.wav');
         game.load.audio('error', 'assets/159367__huminaatio__7-error.wav');
         game.load.audio('failure', 'assets/253174__suntemple__retro-you-lose-sfx.wav');
+        
     }
     
     //var bouncy;
@@ -50,15 +53,16 @@ window.onload = function() {
         //var text = game.add.text( game.world.centerX, 15, "Build something amazing.", style );
         //text.anchor.setTo( 0.5, 0.0 );
         
+        background = game.add.tileSprite(0, 0, 800, 600, 'background');
         word= phrases[game.rnd.integerInRange(0,3)];
         //  Here we'll create a simple array where each letter of the word to enter represents one element:
         for (var i = 0; i < word.length; i++)
         {
             correct[i] = false;
         }
-        //var style = { font: "25px Verdana", fill: "#ffffff", align: "center" };
-        //var text = game.add.text(game.world.centerX, 15, "Type the following:", style);
-        //text.anchor.setTo(0.5, 0.0);
+        var style = { font: "25px Verdana", fill: "#ffffff", align: "center" };
+        var text = game.add.text(game.world.centerX, 15, "Type the following:", style);
+        text.anchor.setTo(0.5, 0.0);
         //  This is our BitmapData onto which we'll draw the word being entered
         bmd = game.make.bitmapData(800, 200);
         bmd.context.font = '25px Arial';
