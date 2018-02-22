@@ -48,6 +48,8 @@ window.onload = function() {
     
     //var bouncy;
     function create() {
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+        
         this.frames = this.add.group(undefined, 'player', true);
         this.map = this.game.add.tilemap('tilemap');
         this.map.addTilesetImage('simples_pimples', 'tiles');
@@ -64,9 +66,7 @@ window.onload = function() {
         this.player.body.collideWorldBounds = true;
         this.groundLayer.resizeWorld();
         this.player.body.gravity.y = 2000;
-        meteors=this.game.add.group();
-        meteors.enableBody = true;
-        meteors.physicsBodyType = Phaser.Physics.ARCADE;
+        meteors=this.game.add.physicsGroup();
         victorySound= game.add.audio('victory');
         failureSound= game.add.audio('failure');
         boo1= game.add.audio('boo1', 0.8, true);
@@ -94,6 +94,8 @@ window.onload = function() {
     {
         timer--;
         timerText.setText('Time remaining:'+ timer);
+        if(timer===0)
+            gameWin();
     }
     function nextLine() {
 
@@ -104,7 +106,7 @@ window.onload = function() {
             gameReady=true;
             text.setText("");
             game.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
-            game.time.events.loop(500, spawnMeteor, this);
+            game.time.events.loop(250, spawnMeteor, this);
             boo1.play();
             boo2.play();
             return;
@@ -122,8 +124,8 @@ window.onload = function() {
     
     function update() {
         this.game.physics.arcade.collide(this.player, this.groundLayer);
-        this.game.physics.arcade.overlap(this.meteors, this.groundLayer, meteorFloor, null, this);
-        this.game.physics.arcade.overlap(this.meteors, this.player, hurtPlayer, null, this);
+        this.game.physics.arcade.collide(this.meteors, this.groundLayer, meteorFloor, floorProcessHandler, this);
+        this.game.physics.arcade.collide(this.meteors, this.player, hurtPlayer, playerProcessHandler, this);
         if(gameReady){
         // Accelerate the 'logo' sprite towards the cursor,
         // accelerating at 500 pixels/second and moving no faster than 500 pixels/second
@@ -157,10 +159,12 @@ window.onload = function() {
     {
         var c = meteors.create(game.rnd.integerInRange(0, 750), 60, 'star');
         c.body.gravity.y= meteorGravity+game.rnd.integerInRange(0, 500);
+        
     }
     function meteorFloor(meteor, floor)
     {
         meteor.kill();
+        
     }
     function hurtPlayer(meteor, player)
     {
@@ -185,5 +189,13 @@ window.onload = function() {
         boo1.stop();
         boo2.stop();
         victorySound.play();
+    }
+    function floorProcessHandler(meteor, floor)
+    {
+        return true;
+    }
+    function playerProcessHandler(meteor, player)
+    {
+        return true;
     }
 };
