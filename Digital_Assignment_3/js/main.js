@@ -124,8 +124,8 @@ window.onload = function() {
     
     function update() {
         this.game.physics.arcade.collide(this.player, this.groundLayer);
-        this.game.physics.arcade.collide(this.meteors, this.groundLayer, meteorFloor, floorProcessHandler, this);
-        this.game.physics.arcade.collide(this.meteors, this.player, hurtPlayer, playerProcessHandler, this);
+        this.game.physics.arcade.collide(meteors, this.groundLayer, meteorFloor, floorProcessHandler, this);
+        this.game.physics.arcade.collide(meteors, this.player, hurtPlayer, playerProcessHandler, this);
         if(gameReady){
         // Accelerate the 'logo' sprite towards the cursor,
         // accelerating at 500 pixels/second and moving no faster than 500 pixels/second
