@@ -207,7 +207,7 @@ window.onload = function() {
             lines= secondLines;
             timer= 30;
             player.velocity=0;
-            player.animations.stop();
+            player.animations.play('idle');
             gameReady=false;
             nextLine();
 
