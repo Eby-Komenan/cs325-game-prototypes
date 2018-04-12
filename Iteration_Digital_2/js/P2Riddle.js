@@ -126,8 +126,8 @@ BasicGame.P2Riddle.prototype = {
                 this.text.setText("Wrong");
             }
             //Comment out those two lines, used for debugging reasons.
-            var str= JSON.stringify(this.save, null, 4);
-            console.log(str);
+            //var str= JSON.stringify(this.save, null, 4);
+            //console.log(str);
             this.time.events.add(Phaser.Timer.SECOND * 3, this.quitGame, this);
         }
     },
